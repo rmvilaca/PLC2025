@@ -8,7 +8,8 @@ Este diretório contém os ficheiros e documentação relativos ao primeiro trab
 Ricardo Machado Vilaça - a102879
 
 ### Descrição
-[Adicionar descrição específica do TPC1]
+Neste TPC foi proposto encontrar uma expressão regular que represente strings binárias que não têm substring 011.
 
 ### Ficheiros
-[Listar os ficheiros principais do trabalho]
+[Soluçao em texto](soluçao.txt)
+[Solução com teste em Regex](soluçao_regex.png)
