@@ -12,4 +12,5 @@ Neste TPC foi proposto encontrar uma expressão regular que represente strings b
 
 ### Ficheiros
 [Soluçao em texto](soluçao.txt)
+
 [Solução com teste em Regex](soluçao_regex.png)
