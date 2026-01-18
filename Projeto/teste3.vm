@@ -1,0 +1,54 @@
+	JUMP main
+main:
+	START
+	PUSHN 3
+	PUSHS "Introduza um número inteiro positivo:"
+	WRITES
+	WRITELN
+	READ
+	ATOI
+	STOREG 0
+	PUSHI 1
+	STOREG 2
+	PUSHI 2
+	STOREG 1
+label1:
+	PUSHG 1
+	PUSHG 0
+	PUSHI 2
+	DIV
+	INFEQ
+	PUSHG 2
+	AND
+	JZ label2
+	PUSHG 0
+	PUSHG 1
+	MOD
+	PUSHI 0
+	EQUAL
+	JZ label4
+	PUSHI 0
+	STOREG 2
+label4:
+	PUSHG 1
+	PUSHI 1
+	ADD
+	STOREG 1
+	JUMP label1
+label2:
+	PUSHG 2
+	JZ label5
+	PUSHG 0
+	WRITEI
+	PUSHS " é um número primo"
+	WRITES
+	WRITELN
+	JUMP label6
+label5:
+	PUSHG 0
+	WRITEI
+	PUSHS " não é um número primo"
+	WRITES
+	WRITELN
+label6:
+	STOP

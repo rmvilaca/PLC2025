@@ -1,0 +1,243 @@
+
+GRAMÁTICA PASCAL 
+
+-------------------------- ESTRUTURA PRINCIPAL ------------------------------------------------------
+gramatica -> programa '.'
+
+programa -> cabecalho corpo
+
+cabecalho -> titulo declaracao_subprogramas declaracoes_variaveis
+
+titulo -> PROGRAM ID ';'
+
+
+----------------------- DECLARAÇÃO DE SUBPROGRAMAS (PROCEDURES E FUNCTIONS)------------------------------------------
+declaracao_subprogramas -> declaracao_subprogramas procedure_declaration
+                         | declaracao_subprogramas function_declaration
+                         | ε
+
+procedure_declaration -> PROCEDURE ID ';' bloco_subprograma ';'
+                       | PROCEDURE ID '(' parametros ')' ';' bloco_subprograma ';'
+
+function_declaration -> FUNCTION ID ':' tipo ';' bloco_subprograma ';'
+                      | FUNCTION ID '(' parametros ')' ':' tipo ';' bloco_subprograma ';'
+
+bloco_subprograma -> declaracoes_variaveis corpo
+
+parametros -> lista_parametros
+            | ε
+
+lista_parametros -> lista_id ':' tipo
+                  | lista_id ':' tipo ';' lista_parametros
+
+
+--------------------------------DECLARAÇÕES DE VARIÁVEIS-------------------------------------
+declaracoes_variaveis -> VAR declaracoes
+                       | ε
+
+declaracoes -> declaracao
+             | declaracao declaracoes
+
+declaracao -> lista_id ':' tipo ';'
+
+lista_id -> ID
+          | lista_id ',' ID
+
+
+# TIPOS
+tipo -> INTEGER
+      | REAL
+      | BOOLEAN
+      | CHAR
+      | STRING
+      | tipo_array
+
+tipo_array -> ARRAY '[' NUMBER RANGE NUMBER ']' OF tipo
+
+
+---------------------------- CORPO DO PROGRAMA-------------------------------------
+corpo -> BEGIN lista_instrucoes END
+
+lista_instrucoes -> instrucao
+                  | lista_instrucoes ';' instrucao
+
+
+----------------------------- INSTRUÇÕES---------------------------------------------
+instrucao -> atribuicao
+           | leitura
+           | escrita
+           | if_statement
+           | while_statement
+           | for_statement
+           | chamada_procedimento
+           | bloco
+           | ε
+
+bloco -> BEGIN lista_instrucoes END
+
+atribuicao -> variavel ASSIGN expressao
+
+chamada_procedimento -> ID '(' lista_expressao ')'
+                      | ID
+
+
+------------------------------------- COMANDOS DE ENTRADA/SAÍDA------------------------------------------
+leitura -> READ '(' lista_variaveis ')'
+         | READLN '(' lista_variaveis ')'
+         | READLN
+
+escrita -> WRITE '(' lista_expressao ')'
+         | WRITELN '(' lista_expressao ')'
+         | WRITELN
+
+lista_variaveis -> variavel
+                 | lista_variaveis ',' variavel
+
+
+-----------------------------------ESTRUTURAS DE CONTROLE-----------------------------------------
+if_statement -> IF expressao THEN instrucao
+              | IF expressao THEN instrucao ELSE instrucao
+
+while_statement -> WHILE expressao DO instrucao
+
+for_statement -> FOR ID ASSIGN expressao TO expressao DO instrucao
+               | FOR ID ASSIGN expressao DOWNTO expressao DO instrucao
+
+
+------------------------------ EXPRESSÕES ----------------------------------------
+lista_expressao -> expressao
+                 | lista_expressao ',' expressao
+
+expressao -> expressao_logica
+
+expressao_logica -> expressao_logica OR expressao_relacional
+                  | expressao_logica AND expressao_relacional
+                  | expressao_relacional
+
+expressao_relacional -> expressao_aritmetica operador_relacional expressao_aritmetica
+                      | expressao_aritmetica
+
+operador_relacional -> EQUALS
+                     | NOT_EQUALS
+                     | LESS_THAN
+                     | LESS_THAN_OR_EQUAL_TO
+                     | GREATER_THAN
+                     | GREATER_THAN_OR_EQUAL_TO
+
+expressao_aritmetica -> expressao_aritmetica '+' termo
+                      | expressao_aritmetica '-' termo
+                      | termo
+
+termo -> termo '*' fator
+       | termo '/' fator
+       | termo DIV fator
+       | termo MOD fator
+       | fator
+
+
+------------------------------------------ FATORES -------------------------------------------
+fator -> NUMBER
+       | REAL_NUMBER
+       | STRING_LITERAL
+       | TRUE
+       | FALSE
+       | variavel
+       | chamada_funcao
+       | '(' expressao ')'
+       | NOT fator
+       | '-' fator
+       | '+' fator
+
+
+---------------------------------------------------- VARIÁVEIS E CHAMADAS DE FUNÇÃO ----------------------
+variavel -> ID
+          | ID '[' expressao ']'
+
+chamada_funcao -> ID '(' lista_expressao ')'
+                | LENGTH '(' expressao ')'
+
+
+
+------------------------- TOKENS NECESSÁRIOS DO LEXER (lex.py) -------------------------------
+ 
+
+Palavras Reservadas:
+- PROGRAM, PROCEDURE, FUNCTION, VAR, ARRAY, OF
+- BEGIN, END
+- READ, READLN, WRITE, WRITELN
+- IF, THEN, ELSE, WHILE, FOR, TO, DOWNTO, DO
+- TRUE, FALSE
+- DIV, MOD, NOT, AND, OR
+- INTEGER, REAL, BOOLEAN, CHAR, STRING
+- LENGTH
+
+Operadores:
+- ASSIGN (:=)
+- EQUALS (=)
+- NOT_EQUALS (<> ou !=)
+- LESS_THAN (<)
+- LESS_THAN_OR_EQUAL_TO (<=)
+- GREATER_THAN (>)
+- GREATER_THAN_OR_EQUAL_TO (>=)
+- RANGE (..)
+
+Literais (caracteres únicos):
+- ; , ( ) . : [ ] + - * /
+
+Valores:
+- ID (identificadores)
+- NUMBER (inteiros)
+- REAL_NUMBER (reais)
+- STRING_LITERAL (strings entre aspas)
+
+
+--------------------------------------- COMPATIBILIDADE COM LEX.PY ----------------------------------
+
+
+Todos os tokens usados na gramática estão definidos no lex.py
+RANGE (..) está corretamente definido como token no lexer
+STRING está nas palavras reservadas
+LENGTH está nas palavras reservadas
+TRUE e FALSE retornam valores booleanos no lexer
+Operadores relacionais todos definidos
+Literais todos na lista de literals
+
+
+
+
+---------------------------------- DIFERENÇAS EM RELAÇÃO À GRAMÁTICA ORIGINAL --------------------------
+
+
+MELHORIAS:
+Estrutura hierárquica mais clara (gramatica → programa → cabecalho)
+Suporte para PROCEDURES além de FUNCTIONS
+STRING como tipo básico (estava no lexer mas não na gramática original)
+READLN/WRITELN sem parênteses (exemplos do projeto usam isto)
+LENGTH como função built-in (exemplo 5 usa)
+Separação entre chamada_procedimento e chamada_funcao
+lista_expressao permite múltiplos argumentos em funções
+lista_variaveis para READ/READLN com múltiplas variáveis
+Sinais unários (+/-) em fatores
+Hierarquia de expressões explícita e correta
+
+MANTIDO DA GRAMÁTICA ORIGINAL:
+Hierarquia de expressões bem estruturada
+Separação clara de níveis (lógico → relacional → aritmético → termo → fator)
+Estrutura didática e organizada
+
+
+
+---------------------------------- NOTAS IMPORTANTES --------------------------------------------------
+
+1. A recursão à esquerda é apropriada para parsers bottom-up (YACC/PLY)
+
+2. O símbolo ε (epsilon) representa a produção vazia
+
+3. A gramática cobre todos os 5 exemplos do projeto:
+   - Exemplo 1: Hello World
+   - Exemplo 2: Fatorial (for, var)
+   - Exemplo 3: Número Primo (while, if-else, boolean)
+   - Exemplo 4: Arrays (array[..] of, acesso indexado)
+   - Exemplo 5: Functions (function com parâmetros, length)
+
+4. Não há conflitos ou ambiguidades conhecidas
