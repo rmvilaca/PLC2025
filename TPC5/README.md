@@ -6,9 +6,3 @@ Este diretório contém os ficheiros e documentação relativos ao quinto trabal
 
 ### Autor
 Ricardo Machado Vilaça - a102879
-
-### Descrição
-[Adicionar descrição específica do TPC5]
-
-### Ficheiros
-[Listar os ficheiros principais do trabalho]

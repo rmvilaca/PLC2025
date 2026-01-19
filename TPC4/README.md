@@ -6,9 +6,3 @@ Este diretório contém os ficheiros e documentação relativos ao quarto trabal
 
 ### Autor
 Ricardo Machado Vilaça - a102879
-
-### Descrição
-[Adicionar descrição específica do TPC4]
-
-### Ficheiros
-[Listar os ficheiros principais do trabalho]
